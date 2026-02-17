@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio of Vikram Sai Simha Vissamsetti, Full Stack Developer at Enablix with expertise in Java, Angular, Ionic, LLMs, OpenSearch, and LlamaIndex."
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Vikram Sai Simha Vissamsetti | Full Stack Developer" />
+    <meta property="og:description" content="Full Stack Developer at Enablix. Building intelligent products with Java, Angular, Spring Boot, LLMs, and RAG pipelines." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Vikram Sai Simha Vissamsetti | Full Stack Developer" />
+    <meta name="twitter:description" content="Full Stack Developer at Enablix. Building intelligent products with Java, Angular, Spring Boot, LLMs, and RAG pipelines." />
+    <meta name="twitter:site" content="@iparamzvik" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23ee5a2e'/><stop offset='100%25' stop-color='%23ff9f68'/></linearGradient></defs><circle cx='50' cy='50' r='50' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800' font-size='42'>VS</text></svg>" />
+
+    <title>Vikram Sai Simha Vissamsetti | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Syne:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Prevent dark-mode flash -->
+    <script>
+      (function () {
+        var t = localStorage.getItem("theme");
+        if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="noise-layer" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <nav class="nav container" aria-label="Main navigation">
+        <a href="#home" class="brand">
+          <span class="brand-dot" aria-hidden="true"></span>
+          VSSV
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#credentials">Credentials</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-end">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+            <svg class="theme-icon sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg class="theme-icon moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+          <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main id="home">
+      <section class="hero container section">
+        <div class="avatar reveal">
+          <!-- To use your photo, replace the span below with: -->
+          <!-- <img src="your-photo.jpg" alt="Vikram Sai Simha Vissamsetti" /> -->
+          <span>VS</span>
+        </div>
+
+        <p class="eyebrow reveal">Full Stack Developer @ Enablix</p>
+        <h1 class="headline reveal">
+          Vikram Sai Simha
+          <span>Vissamsetti</span>
+        </h1>
+
+        <div class="typing-wrapper reveal" aria-live="polite">
+          <span class="typing-prefix">I build </span><span class="typing-text" id="typingText"></span><span class="typing-cursor" aria-hidden="true">|</span>
+        </div>
+
+        <p class="subhead reveal">
+          I build and optimize software products using Java, Angular, Spring Boot, MongoDB, and Ionic. I also develop LLM-powered workflows with OpenSearch and LlamaIndex to improve discoverability and information retrieval.
+        </p>
+
+        <div class="hero-meta reveal">
+          <span>Hyderabad, Telangana, India</span>
+          <span>Enablix (March 2021 - Present)</span>
+          <span>Ex-TCS (British Telecommunications)</span>
+        </div>
+
+        <div class="hero-actions reveal">
+          <a class="btn btn-primary" href="#experience">View Experience</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/vikramvissamsetti/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="btn btn-ghost" href="https://github.com/paramzvik" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="btn btn-ghost" href="https://x.com/iparamzvik" target="_blank" rel="noreferrer">Twitter / X</a>
+        </div>
+
+        <div class="hero-grid reveal" aria-label="Focus areas">
+          <article>
+            <h3>LLM Product Features</h3>
+            <p>Developed LLM-powered excerpt generation and tagging workflows to improve sales asset discoverability.</p>
+          </article>
+          <article>
+            <h3>RAG and Search</h3>
+            <p>Built RAG-based chatbot flows using OpenAI GPT, OpenSearch vector storage, and LlamaIndex orchestration.</p>
+          </article>
+          <article>
+            <h3>Web + Mobile Delivery</h3>
+            <p>Delivered REST APIs, modern UI improvements, and Ionic apps for Android and iOS with production quality checks.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="about section container" id="about">
+        <div class="section-heading reveal">
+          <p class="eyebrow">About</p>
+          <h2>Building intelligent, user-focused products across web, mobile, and AI-assisted workflows.</h2>
+        </div>
+        <div class="about-content reveal">
+          <p>
+            As a Full Stack Developer at Enablix, I work on UI redesign, REST API implementation, learning modules, analytics-based optimization, and cross-platform mobile delivery. My focus is improving usability, accessibility, and product efficiency.
+          </p>
+          <p>
+            I have also built RAG chatbot capabilities and LLM-powered content workflows, and previously contributed at TCS to British Telecommunications through test automation, networking device testing, and structured quality plans.
+          </p>
+        </div>
+      </section>
+
+      <section class="skills section container" id="skills">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Skills</p>
+          <h2>Technical stack and delivery strengths.</h2>
+        </div>
+
+        <div class="skills-grid">
+          <article class="card reveal">
+            <h3>Frontend</h3>
+            <ul>
+              <li>Angular</li>
+              <li>HTML & CSS</li>
+              <li>JavaScript / TypeScript</li>
+              <li>Ionic</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <h3>Backend</h3>
+            <ul>
+              <li>Java</li>
+              <li>Spring Boot</li>
+              <li>REST API Development</li>
+              <li>MongoDB</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <h3>AI & Search</h3>
+            <ul>
+              <li>Large Language Models (LLM)</li>
+              <li>OpenSearch</li>
+              <li>LlamaIndex</li>
+              <li>RAG Pipelines</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <h3>Quality & Process</h3>
+            <ul>
+              <li>Manual Testing</li>
+              <li>Selenium</li>
+              <li>Agile</li>
+              <li>Jira / AWS / Docker</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="projects section container" id="projects">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Projects</p>
+          <h2>Work highlights from recent roles.</h2>
+        </div>
+
+        <div class="projects-grid">
+          <article class="project-card reveal">
+            <p class="tag">LLM Workflow</p>
+            <h3>Automated Excerpt and Tag Generation</h3>
+            <p>
+              Developed an LLM-powered system that generates concise excerpts and relevant tags for sales assets, reducing manual effort.
+            </p>
+          </article>
+
+          <article class="project-card reveal">
+            <p class="tag">RAG Chatbot</p>
+            <h3>AI Information Retrieval Assistant</h3>
+            <p>
+              Built a RAG chatbot using OpenAI GPT, OpenSearch as vector storage, and LlamaIndex to enable fast, high-quality responses on sales assets.
+            </p>
+          </article>
+
+          <article class="project-card reveal">
+            <p class="tag">Platform Engineering</p>
+            <h3>Aspose + Apache POI Integrations</h3>
+            <p>
+              Integrated Aspose for PPT slide merging and Apache POI for export/report features, improving document workflows and user productivity.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="experience section container" id="experience">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Experience</p>
+          <h2>Professional journey and education.</h2>
+        </div>
+
+        <div class="timeline">
+          <article class="timeline-item reveal">
+            <p class="timeline-meta">March 2021 - Present</p>
+            <h3>Full Stack Developer, Enablix</h3>
+            <p>Led UI improvements, built REST APIs, created a learning module, delivered Ionic mobile apps, and implemented LLM/RAG capabilities using OpenSearch and LlamaIndex.</p>
+          </article>
+          <article class="timeline-item reveal">
+            <p class="timeline-meta">July 2019 - March 2021</p>
+            <h3>System Engineer, Tata Consultancy Services (Bangalore)</h3>
+            <p>Worked under British Telecommunications to automate testing, validate networking devices, maintain testing plans, and improve quality through detailed bug reporting.</p>
+          </article>
+          <article class="timeline-item reveal">
+            <p class="timeline-meta">July 2015 - May 2019</p>
+            <h3>BE, Electronics & Communication, Arunai Engineering College</h3>
+            <p>Graduated with CGPA 8.65. Earlier academics include 97.2% in Intermediate and 9.7 CGPA in SSC.</p>
+          </article>
+          <article class="timeline-item reveal">
+            <p class="timeline-meta">Awards</p>
+            <h3>Recognition</h3>
+            <p>Recognized with Star of the Quarter and On the Spot Award for consistent delivery and product contribution.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="skills section container" id="credentials">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Credentials</p>
+          <h2>Certifications and languages.</h2>
+        </div>
+        <div class="skills-grid">
+          <article class="card reveal">
+            <h3>Certifications</h3>
+            <ul>
+              <li>Pandas Micro-Course</li>
+              <li>Python: Data Analysis</li>
+              <li>Programming Foundations: Algorithms</li>
+              <li>Hadoop Foundations - Level 1</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <h3>Languages</h3>
+            <ul>
+              <li>Telugu (Native/Bilingual)</li>
+              <li>English (Limited Working)</li>
+              <li>Tamil (Limited Working)</li>
+              <li>Hindi (Elementary)</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <h3>Core Domains</h3>
+            <ul>
+              <li>Enterprise Sales Enablement</li>
+              <li>Information Retrieval</li>
+              <li>Testing & Quality Engineering</li>
+              <li>Document Workflow Automation</li>
+            </ul>
+          </article>
+          <article class="card reveal">
+            <h3>Focus</h3>
+            <ul>
+              <li>Product Usability</li>
+              <li>Performance Optimization</li>
+              <li>Automation-first Delivery</li>
+              <li>Collaborative Engineering</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="contact section container" id="contact">
+        <div class="contact-panel reveal">
+          <p class="eyebrow">Contact</p>
+          <h2>Let's build something meaningful.</h2>
+          <p>
+            Open to Full Stack Developer opportunities and product engineering collaborations.
+          </p>
+          <p class="contact-meta">Email: vikramvissamsetti@gmail.com</p>
+          <p class="contact-meta">Phone: +91 9676 514 048</p>
+          <div class="contact-actions">
+            <a class="btn btn-primary" href="https://www.linkedin.com/in/vikramvissamsetti/" target="_blank" rel="noreferrer">
+              Connect on LinkedIn
+            </a>
+            <a class="btn btn-ghost" href="tel:+919676514048">Call</a>
+            <a class="btn btn-ghost" href="mailto:vikramvissamsetti@gmail.com">Email Me</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"/>
+      </svg>
+    </button>
+
+    <footer class="site-footer">
+      <p>&copy; <span id="year"></span> Vikram Sai Simha Vissamsetti. Built with intent.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
