@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deploying · vikramvissamsetti.work</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:      #00ff41;
+      --green-dim:  #00c832;
+      --amber:      #ffb300;
+      --red:        #ff4444;
+      --blue:       #5af;
+      --bg:         #0a0a0a;
+      --panel:      #0c140c;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--green);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      overflow: hidden;
+    }
+
+    /* scanlines */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.16) 2px,rgba(0,0,0,0.16) 4px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* vignette */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.6) 100%);
+      pointer-events: none;
+      z-index: 2;
+      animation: flicker 8s infinite;
+    }
+
+    @keyframes flicker {
+      0%,100%{opacity:1} 91%{opacity:1} 92%{opacity:.9} 93%{opacity:1} 97%{opacity:.95} 98%{opacity:1}
+    }
+
+    /* matrix */
+    #matrix { position:fixed; inset:0; opacity:.14; pointer-events:none; z-index:0; }
+
+    /* layout */
+    .shell {
+      position: relative;
+      z-index: 10;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    /* terminal window */
+    .terminal {
+      width: min(820px, 100%);
+      background: var(--panel);
+      border: 1px solid rgba(0,255,65,0.22);
+      border-radius: 10px;
+      box-shadow:
+        0 0 0 1px rgba(0,255,65,0.06),
+        0 0 50px rgba(0,255,65,0.1),
+        0 0 100px rgba(0,255,65,0.04);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 32px);
+    }
+
+    /* title bar */
+    .titlebar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 16px;
+      background: rgba(0,255,65,0.04);
+      border-bottom: 1px solid rgba(0,255,65,0.1);
+    }
+    .dot { width:12px; height:12px; border-radius:50%; }
+    .dot-r{background:#ff5f57} .dot-y{background:#ffbd2e} .dot-g{background:#28c840}
+    .titlebar-title {
+      margin-left: 10px;
+      font-size: 12px;
+      opacity: .5;
+      letter-spacing: .07em;
+    }
+    .titlebar-badge {
+      margin-left: auto;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: .08em;
+      font-weight: 700;
+    }
+    .badge-running { background: rgba(255,179,0,.15); color: var(--amber); border:1px solid rgba(255,179,0,.3); }
+    .badge-success { background: rgba(0,255,65,.12); color: var(--green); border:1px solid rgba(0,255,65,.3); }
+    .badge-failure { background: rgba(255,68,68,.15); color: var(--red); border:1px solid rgba(255,68,68,.3); }
+    .badge-queued  { background: rgba(90,170,255,.12); color: var(--blue); border:1px solid rgba(90,170,255,.3); }
+
+    /* body */
+    .term-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px 24px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,255,65,.2) transparent;
+    }
+
+    /* header block */
+    .deploy-header { margin-bottom: 20px; }
+    .deploy-title {
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 700;
+      color: var(--green);
+      text-shadow: 0 0 20px rgba(0,255,65,.4);
+      margin-bottom: 4px;
+    }
+    .deploy-meta { font-size: 12px; opacity: .45; letter-spacing: .05em; }
+    .deploy-meta span { margin-right: 16px; }
+
+    /* commit chip */
+    .commit-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 10px 0 16px;
+      padding: 6px 12px;
+      background: rgba(0,255,65,.05);
+      border: 1px solid rgba(0,255,65,.15);
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    .commit-sha { color: var(--blue); }
+    .commit-msg { opacity: .7; }
+
+    /* divider */
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(0,255,65,.1);
+      margin: 14px 0;
+    }
+
+    /* section label */
+    .section-label {
+      font-size: 10px;
+      letter-spacing: .12em;
+      opacity: .4;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    /* job block */
+    .job { margin-bottom: 18px; }
+    .job-name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* step row */
+    .step {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 3px 0;
+      font-size: 12px;
+      line-height: 1.6;
+      opacity: .85;
+    }
+    .step-icon { flex-shrink: 0; width: 14px; text-align: center; }
+    .step-name { flex: 1; }
+    .step-dur  { opacity: .4; font-size: 11px; white-space: nowrap; }
+
+    .icon-pass    { color: var(--green); }
+    .icon-fail    { color: var(--red); }
+    .icon-running { color: var(--amber); animation: spin 1.2s linear infinite; display:inline-block; }
+    .icon-queued  { color: var(--blue); opacity:.6; }
+    .icon-skip    { opacity:.3; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* overall progress bar */
+    .prog-wrap {
+      height: 4px;
+      background: rgba(0,255,65,.08);
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 10px 0 6px;
+    }
+    .prog-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green-dim), var(--green));
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--green);
+      transition: width .6s ease;
+    }
+
+    /* log stream */
+    .log-area {
+      background: rgba(0,0,0,.4);
+      border: 1px solid rgba(0,255,65,.08);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 11px;
+      line-height: 1.7;
+      max-height: 120px;
+      overflow-y: auto;
+      margin-top: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,255,65,.15) transparent;
+    }
+    .log-line { opacity: .65; }
+    .log-line.fresh { opacity: 1; color: #fff; }
+
+    /* countdown + redirect */
+    .redirect-block {
+      margin-top: 18px;
+      padding: 14px 18px;
+      background: rgba(0,255,65,.06);
+      border: 1px solid rgba(0,255,65,.2);
+      border-radius: 8px;
+      display: none;
+    }
+    .redirect-block.visible { display: block; }
+    .redirect-title { font-size:13px; font-weight:700; margin-bottom:4px; }
+    .redirect-count { color: var(--amber); font-size: 12px; }
+
+    /* refresh note */
+    .refresh-note {
+      margin-top: 12px;
+      font-size: 11px;
+      opacity: .35;
+      text-align: right;
+    }
+
+    /* cursor */
+    .cursor {
+      display: inline-block;
+      width: 8px; height: 1em;
+      background: var(--green);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* error state */
+    .error-msg { color: var(--red); font-size: 12px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+<div class="shell">
+  <div class="terminal">
+    <div class="titlebar">
+      <span class="dot dot-r"></span>
+      <span class="dot dot-y"></span>
+      <span class="dot dot-g"></span>
+      <span class="titlebar-title">deploy-watch — paramzvik/paramzvik.github.io</span>
+      <span class="titlebar-badge badge-queued" id="header-badge">FETCHING</span>
+    </div>
+    <div class="term-body" id="term-body">
+
+      <div class="deploy-header">
+        <div class="deploy-title" id="run-title">Connecting to GitHub Actions…</div>
+        <div class="deploy-meta">
+          <span id="run-branch">branch: <span style="color:var(--green)">main</span></span>
+          <span id="run-started">started: —</span>
+          <span id="run-duration">elapsed: —</span>
+        </div>
+      </div>
+
+      <div class="commit-chip" id="commit-chip" style="display:none">
+        <span class="commit-sha" id="commit-sha">———</span>
+        <span class="commit-msg" id="commit-msg">———</span>
+      </div>
+
+      <div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+
+      <hr class="divider" />
+      <div class="section-label">Workflow jobs</div>
+      <div id="jobs-area">
+        <div class="step">
+          <span class="step-icon icon-queued">○</span>
+          <span class="step-name" style="opacity:.4">Waiting for workflow data…</span>
+          <span class="step-dur"></span>
+        </div>
+      </div>
+
+      <div class="log-area" id="log-area"></div>
+
+      <div class="redirect-block" id="redirect-block">
+        <div class="redirect-title">✓ Deployment complete — site is live.</div>
+        <div class="redirect-count" id="redirect-count">Redirecting to portfolio in 5s…</div>
+      </div>
+
+      <div class="refresh-note">auto-refreshes every 5s &nbsp;·&nbsp; <span id="next-tick">—</span><span class="cursor"></span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Config ───────────────────────────────────────── */
+const REPO   = 'paramzvik/paramzvik.github.io'
+const API    = `https://api.github.com/repos/${REPO}`
+const POLL   = 5000
+const HOME   = '/'
+
+/* ── Matrix rain ──────────────────────────────────── */
+;(function(){
+  const c = document.getElementById('matrix')
+  const cx = c.getContext('2d')
+  let drops
+  function init(){
+    c.width = innerWidth; c.height = innerHeight
+    drops = Array(Math.floor(innerWidth/14)).fill(1)
+  }
+  function draw(){
+    cx.fillStyle='rgba(10,10,10,0.05)'; cx.fillRect(0,0,c.width,c.height)
+    cx.fillStyle='#00ff41'; cx.font='13px JetBrains Mono,monospace'
+    const ch='アイウエオ01ABCDEFλμπ∑∆Ω{}[]<>|'
+    drops.forEach((y,i)=>{
+      cx.fillText(ch[Math.floor(Math.random()*ch.length)],i*14,y*14)
+      if(y*14>c.height&&Math.random()>.975) drops[i]=0
+      drops[i]++
+    })
+  }
+  init(); setInterval(draw,55); addEventListener('resize',init)
+})()
+
+/* ── Helpers ──────────────────────────────────────── */
+const $  = id => document.getElementById(id)
+const ts = iso => {
+  if(!iso) return '—'
+  const d = new Date(iso)
+  return d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit' })
+}
+const elapsed = iso => {
+  if(!iso) return '—'
+  const s = Math.floor((Date.now() - new Date(iso)) / 1000)
+  if(s < 60) return `${s}s`
+  return `${Math.floor(s/60)}m ${s%60}s`
+}
+const stepIcon = status => {
+  if(status === 'completed') return '<span class="step-icon icon-pass">✓</span>'
+  if(status === 'in_progress') return '<span class="step-icon icon-running">⟳</span>'
+  if(status === 'queued') return '<span class="step-icon icon-queued">○</span>'
+  return '<span class="step-icon icon-skip">·</span>'
+}
+const conclusionColor = c => {
+  if(c === 'success') return 'var(--green)'
+  if(c === 'failure') return 'var(--red)'
+  return 'var(--amber)'
+}
+
+/* ── Log feed ─────────────────────────────────────── */
+const logLines = []
+function addLog(msg, fresh=false) {
+  logLines.push({ msg, fresh })
+  if(logLines.length > 50) logLines.shift()
+  renderLog()
+}
+function renderLog() {
+  const area = $('log-area')
+  area.innerHTML = logLines.map((l,i) =>
+    `<div class="log-line${l.fresh&&i===logLines.length-1?' fresh':''}">${l.msg}</div>`
+  ).join('')
+  area.scrollTop = area.scrollHeight
+}
+
+/* ── State ────────────────────────────────────────── */
+let lastRunId = null
+let redirecting = false
+let countdown = 5
+
+/* ── Render run ───────────────────────────────────── */
+function renderRun(run, jobs) {
+  const status     = run.status        // queued | in_progress | completed
+  const conclusion = run.conclusion    // success | failure | null
+  const badge      = $('header-badge')
+
+  // badge
+  badge.className = 'titlebar-badge ' + (
+    status === 'completed'
+      ? (conclusion === 'success' ? 'badge-success' : 'badge-failure')
+      : status === 'in_progress' ? 'badge-running' : 'badge-queued'
+  )
+  badge.textContent =
+    status === 'completed' ? (conclusion === 'success' ? 'SUCCESS' : 'FAILED')
+    : status === 'in_progress' ? 'RUNNING'
+    : 'QUEUED'
+
+  // title
+  $('run-title').textContent =
+    status === 'completed'
+      ? (conclusion === 'success' ? '✓ Deployed successfully.' : '✗ Deployment failed.')
+      : status === 'in_progress' ? '⟳ Deployment in progress…'
+      : '○ Workflow queued…'
+
+  // meta
+  $('run-started').textContent  = `started: ${ts(run.created_at)}`
+  $('run-duration').textContent = `elapsed: ${elapsed(run.created_at)}`
+
+  // commit
+  const chip = $('commit-chip')
+  chip.style.display = 'inline-flex'
+  $('commit-sha').textContent  = run.head_sha.slice(0,7)
+  $('commit-msg').textContent  = run.head_commit?.message?.split('\n')[0].slice(0,60) || '—'
+
+  // progress bar
+  let pct = 0
+  if(status === 'completed') pct = 100
+  else if(jobs?.length) {
+    const done = jobs.filter(j => j.status === 'completed').length
+    pct = Math.round((done / jobs.length) * 90)
+  } else if(status === 'in_progress') pct = 15
+  $('prog-bar').style.width = pct + '%'
+
+  // jobs
+  const area = $('jobs-area')
+  if(!jobs?.length) {
+    area.innerHTML = '<div class="step"><span class="step-icon icon-queued">○</span><span class="step-name" style="opacity:.4">Waiting for runner…</span></div>'
+  } else {
+    area.innerHTML = jobs.map(job => {
+      const steps = (job.steps||[]).map(s => {
+        const dur = (s.started_at && s.completed_at)
+          ? `${Math.round((new Date(s.completed_at)-new Date(s.started_at))/1000)}s`
+          : ''
+        return `<div class="step">${stepIcon(s.status)}<span class="step-name">${s.name}</span><span class="step-dur">${dur}</span></div>`
+      }).join('')
+
+      const jColor = job.status==='completed'
+        ? conclusionColor(job.conclusion)
+        : job.status==='in_progress' ? 'var(--amber)' : 'rgba(90,170,255,.7)'
+
+      return `<div class="job">
+        <div class="job-name">
+          ${stepIcon(job.status)}
+          <span style="color:${jColor}">${job.name}</span>
+        </div>
+        <div style="padding-left:22px">${steps || '<div class="step"><span style="opacity:.35">No steps yet…</span></div>'}</div>
+      </div>`
+    }).join('')
+  }
+
+  // completed → redirect
+  if(status === 'completed' && conclusion === 'success' && !redirecting) {
+    redirecting = true
+    const block = $('redirect-block')
+    block.classList.add('visible')
+    addLog(`[${ts(new Date().toISOString())}] 🚀 Build complete. Redirecting in ${countdown}s…`, true)
+    const tick = setInterval(() => {
+      countdown--
+      $('redirect-count').textContent = `Redirecting to portfolio in ${countdown}s…`
+      if(countdown <= 0) {
+        clearInterval(tick)
+        location.href = HOME
+      }
+    }, 1000)
+  }
+}
+
+/* ── Fetch & poll ─────────────────────────────────── */
+async function poll() {
+  try {
+    const runsRes  = await fetch(`${API}/actions/runs?per_page=1`)
+    const runsData = await runsRes.json()
+    const run      = runsData.workflow_runs?.[0]
+    if(!run) { addLog('No workflow runs found yet.'); return }
+
+    const isNew = run.id !== lastRunId
+    if(isNew) {
+      lastRunId = run.id
+      addLog(`[${ts(new Date().toISOString())}] Run #${run.run_number} detected — ${run.name}`, true)
+    }
+
+    const jobsRes  = await fetch(`${API}/actions/runs/${run.id}/jobs`)
+    const jobsData = await jobsRes.json()
+    const jobs     = jobsData.jobs || []
+
+    // log in-progress step changes
+    jobs.forEach(job => {
+      const active = (job.steps||[]).find(s => s.status === 'in_progress')
+      if(active) addLog(`[${ts(new Date().toISOString())}] ⟳ ${job.name} → ${active.name}`)
+    })
+
+    renderRun(run, jobs)
+  } catch(e) {
+    addLog(`[ERR] ${e.message}`)
+  }
+}
+
+/* ── Tick counter ─────────────────────────────────── */
+let nextIn = POLL/1000
+function tickDisplay() {
+  if(!redirecting) {
+    $('next-tick').textContent = `next refresh in ${nextIn}s`
+    nextIn = nextIn <= 1 ? POLL/1000 : nextIn - 1
+  }
+}
+
+/* ── Boot ─────────────────────────────────────────── */
+addLog(`[${ts(new Date().toISOString())}] deploy-watch started — monitoring ${REPO}`)
+poll()
+setInterval(() => { if(!redirecting) poll() }, POLL)
+setInterval(tickDisplay, 1000)
+</script>
+</body>
+</html>
