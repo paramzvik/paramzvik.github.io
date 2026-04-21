@@ -1,333 +1,786 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Portfolio of Vikram Sai Simha Vissamsetti, Full Stack Developer at Enablix with expertise in Java, Angular, Ionic, LLMs, OpenSearch, and LlamaIndex."
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vikram Sai Simha Vissamsetti — Full Stack Developer</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23080808'/><polygon points='4,6 10,6 16,20 22,6 28,6 16,28' fill='none' stroke='%23c8922a' stroke-width='2' stroke-linejoin='round'/><line x1='9' y1='6' x2='23' y2='6' fill='none' stroke='%23c8922a' stroke-width='1.5'/></svg>" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ─── */
+    :root {
+      --bg:        #080808;
+      --bg2:       #0f0f0f;
+      --surface:   #141414;
+      --border:    rgba(255,255,255,0.07);
+      --text:      #f0ede8;
+      --muted:     rgba(240,237,232,0.45);
+      --accent:    oklch(0.72 0.14 65);
+      --accent2:   oklch(0.72 0.14 210);
+      --ff:        'Satoshi', sans-serif;
+      --ease-out:  cubic-bezier(0.16,1,0.3,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--ff); font-size: 16px; line-height: 1.6; overflow-x: hidden; cursor: none; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    ::selection { background: var(--accent); color: #000; }
+    body.loading { overflow: hidden; }
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="Vikram Sai Simha Vissamsetti | Full Stack Developer" />
-    <meta property="og:description" content="Full Stack Developer at Enablix. Building intelligent products with Java, Angular, Spring Boot, LLMs, and RAG pipelines." />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_IN" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Vikram Sai Simha Vissamsetti | Full Stack Developer" />
-    <meta name="twitter:description" content="Full Stack Developer at Enablix. Building intelligent products with Java, Angular, Spring Boot, LLMs, and RAG pipelines." />
-    <meta name="twitter:site" content="@iparamzvik" />
+    /* ─── NOISE ─── */
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity:0.025; pointer-events:none; z-index:0; }
 
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23ee5a2e'/><stop offset='100%25' stop-color='%23ff9f68'/></linearGradient></defs><circle cx='50' cy='50' r='50' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800' font-size='42'>VS</text></svg>" />
+    /* ─── CURSOR: blend mode inversion ─── */
+    #cursor-blend {
+      position: fixed; top: 0; left: 0;
+      width: 28px; height: 28px;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%,-50%);
+      mix-blend-mode: difference;
+      transition: width .35s var(--ease-out), height .35s var(--ease-out), border-radius .35s var(--ease-out);
+      will-change: transform;
+    }
+    #cursor-dot {
+      position: fixed; top: 0; left: 0;
+      width: 4px; height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%,-50%);
+      mix-blend-mode: difference;
+    }
+    body.cursor-hover  #cursor-blend { width: 48px; height: 48px; }
+    body.cursor-project #cursor-blend { width: 48px; height: 48px; }
 
-    <title>Vikram Sai Simha Vissamsetti | Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Syne:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    /* ─── SCROLL PROGRESS ─── */
+    #scroll-progress { position:fixed; top:0; left:0; height:2px; background:var(--accent); z-index:200; width:0%; transition:width .1s linear; }
 
-    <!-- Prevent dark-mode flash -->
-    <script>
-      (function () {
-        var t = localStorage.getItem("theme");
-        if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-          document.documentElement.setAttribute("data-theme", "dark");
-        }
-      })();
-    </script>
-  </head>
-  <body>
-    <div class="noise-layer" aria-hidden="true"></div>
+    /* ─── PRELOADER ─── */
+    #preloader { position:fixed; inset:0; background:#020202; z-index:9999; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; padding:60px 72px; transition:opacity .6s ease, transform .6s cubic-bezier(0.7,0,0.84,0); }
+    #preloader.exit { opacity:0; transform:translateY(-12px); pointer-events:none; }
+    .pre-header { font-family:monospace; font-size:.7rem; color:rgba(200,146,42,.6); letter-spacing:.18em; text-transform:uppercase; margin-bottom:40px; opacity:0; animation:fadeUp .5s ease .2s forwards; }
+    .pre-terminal { font-family:'Courier New',monospace; font-size:clamp(12px,1vw,15px); line-height:2; color:#888; max-width:680px; }
+    .pre-line { display:block; white-space:pre; }
+    .pre-prompt { color:rgba(200,146,42,.7); }
+    .pre-keyword { color:#569cd6; }
+    .pre-string  { color:#ce9178; }
+    .pre-fn      { color:#dcdcaa; }
+    .pre-comment { color:#4a4a4a; }
+    .pre-hi      { color:#f0ede8; }
+    .pre-cursor  { display:inline-block; width:8px; height:1.1em; background:var(--accent); vertical-align:middle; margin-left:2px; animation:blink .8s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .pre-bigline { font-family:var(--ff); font-weight:900; font-size:clamp(40px,5vw,80px); letter-spacing:-.03em; color:#f0ede8; line-height:1; margin-top:32px; opacity:0; }
+    .pre-bigline span { color:var(--accent); }
+    .pre-progress-wrap { width:100%; max-width:400px; height:1px; background:rgba(255,255,255,.08); margin-top:48px; opacity:0; }
+    .pre-progress-bar  { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0; transition:width .05s linear; }
+    .pre-pct { font-family:monospace; font-size:.7rem; color:rgba(200,146,42,.5); margin-top:10px; letter-spacing:.1em; opacity:0; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-    <header class="site-header">
-      <nav class="nav container" aria-label="Main navigation">
-        <a href="#home" class="brand">
-          <span class="brand-dot" aria-hidden="true"></span>
-          VSSV
-        </a>
+    /* ─── NAV ─── */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:28px 48px; transition:background .4s, padding .4s; }
+    nav.scrolled { background:rgba(8,8,8,.88); backdrop-filter:blur(16px); padding:18px 48px; border-bottom:1px solid var(--border); }
+    .nav-logo { font-weight:900; font-size:1rem; letter-spacing:-.02em; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:32px; }
+    .nav-links a { font-size:.78rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); transition:color .2s; position:relative; padding-bottom:3px; }
+    .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:1px; background:var(--accent); transition:width .3s var(--ease-out); }
+    .nav-links a:hover, .nav-links a.active { color:var(--text); }
+    .nav-links a.active::after, .nav-links a:hover::after { width:100%; }
 
-        <ul class="nav-links" id="navLinks">
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#credentials">Credentials</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
+    /* ─── HERO ─── */
+    #hero { position:relative; min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:0 48px; overflow:hidden; }
+    .hero-bg-line { position:absolute; top:0; right:0; width:1px; height:100%; background:linear-gradient(to bottom,transparent,var(--border) 30%,var(--border) 70%,transparent); }
+    .hero-top-bar { position:absolute; top:96px; left:48px; right:48px; display:flex; align-items:center; justify-content:space-between; opacity:0; transform:translateY(-16px); }
+    .hero-top-left { display:flex; align-items:center; gap:16px; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+    .hero-top-left span { color:var(--accent); }
+    .hero-top-right { font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+    .hero-name { font-weight:900; font-size:clamp(52px,8vw,128px); line-height:.92; letter-spacing:-.04em; overflow:hidden; }
+    .hero-name .line { overflow:hidden; display:block; }
+    .hero-name .word { display:inline-block; transform:translateY(110%); opacity:0; }
+    .hero-name .last { color:var(--accent); }
+    .hero-role { margin-top:36px; display:flex; align-items:center; gap:20px; opacity:0; transform:translateY(24px); }
+    .hero-role-tag { font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); padding:6px 14px; }
+    .hero-role-text { font-size:.95rem; color:var(--muted); font-weight:300; }
+    .hero-scroll { position:absolute; bottom:40px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:10px; opacity:0; }
+    .hero-scroll span { font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+    .scroll-line { width:1px; height:56px; background:linear-gradient(to bottom,var(--accent),transparent); animation:scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%,100%{opacity:.4;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.2)} }
+    .hero-accent-dot { position:absolute; top:120px; left:48px; width:6px; height:6px; background:var(--accent); border-radius:50%; opacity:0; }
 
-        <div class="nav-end">
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
-            <svg class="theme-icon sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-            </svg>
-            <svg class="theme-icon moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
-          </button>
-          <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-          </button>
+    /* ─── CONTAINER ─── */
+    section { position:relative; }
+    .container { max-width:1200px; margin:0 auto; padding:0 48px; }
+
+    /* ─── SECTION LABELS ─── */
+    .section-label { font-size:.66rem; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:20px; display:flex; align-items:center; gap:14px; }
+    .section-label::before { content:''; display:block; width:28px; height:1px; background:var(--accent); }
+    .ghost-num { position:absolute; top:-20px; right:0; font-size:clamp(80px,10vw,160px); font-weight:900; line-height:1; color:rgba(255,255,255,.03); letter-spacing:-.06em; pointer-events:none; user-select:none; }
+
+    /* ─── REVEAL ─── */
+    .reveal       { opacity:0; transform:translateY(40px); transition:opacity .8s var(--ease-out), transform .8s var(--ease-out); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-left  { opacity:0; transform:translateX(-40px); transition:opacity .8s var(--ease-out), transform .8s var(--ease-out); }
+    .reveal-left.visible { opacity:1; transform:translateX(0); }
+    .reveal-scale { opacity:0; transform:scale(.94); transition:opacity .8s var(--ease-out), transform .8s var(--ease-out); }
+    .reveal-scale.visible { opacity:1; transform:scale(1); }
+    .stagger-1{transition-delay:.1s} .stagger-2{transition-delay:.2s} .stagger-3{transition-delay:.3s}
+    .stagger-4{transition-delay:.4s} .stagger-5{transition-delay:.5s} .stagger-6{transition-delay:.6s}
+
+    /* ─── ABOUT ─── */
+    #about { padding:140px 0; border-top:1px solid var(--border); }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr 340px; gap:72px; align-items:start; }
+    .about-heading { font-weight:900; font-size:clamp(34px,3.8vw,58px); line-height:1.05; letter-spacing:-.03em; }
+    .about-heading em { font-style:normal; color:var(--accent); }
+    .about-stats { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); margin-top:48px; }
+    .stat-cell { background:var(--bg); padding:24px 20px; }
+    .stat-num { font-weight:900; font-size:2.2rem; letter-spacing:-.04em; }
+    .stat-num span { color:var(--accent); }
+    .stat-label { font-size:.75rem; color:var(--muted); margin-top:4px; letter-spacing:.04em; }
+    .about-body { color:var(--muted); font-size:1rem; line-height:1.8; font-weight:300; }
+    .about-body p+p { margin-top:20px; }
+    .about-photo-wrap { position:relative; overflow:hidden; clip-path:polygon(0 0,100% 0,100% 88%,88% 100%,0 100%); }
+    .about-photo-wrap img { width:100%; aspect-ratio:3/4; object-fit:cover; object-position:center top; filter:grayscale(15%); transition:filter .5s,transform .6s var(--ease-out); }
+    .about-photo-wrap:hover img { filter:grayscale(0%); transform:scale(1.04); }
+    .about-photo-wrap::after { content:''; position:absolute; inset:0; border:1px solid var(--border); pointer-events:none; }
+    .about-photo-corner { position:absolute; bottom:12%; right:0; width:44px; height:44px; background:var(--accent); clip-path:polygon(100% 0,100% 100%,0 100%); }
+
+    /* ─── WORK ─── */
+    #work { padding:140px 0; border-top:1px solid var(--border); }
+    .work-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:64px; }
+    .work-heading { font-weight:900; font-size:clamp(34px,3.8vw,54px); letter-spacing:-.03em; line-height:1.05; }
+    .work-count { font-size:.72rem; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; padding-bottom:8px; font-weight:500; }
+    .projects-list { display:flex; flex-direction:column; gap:1px; background:var(--border); border:1px solid var(--border); }
+
+    /* Project accent colors per item */
+    .project-item { background:var(--bg); display:grid; grid-template-columns:56px 1fr auto; align-items:center; gap:32px; padding:36px 36px 36px 0; transition:background .3s; cursor:none; position:relative; overflow:hidden; border-left:3px solid transparent; }
+    .project-item:nth-child(1){border-left-color:oklch(0.72 0.14 65);}
+    .project-item:nth-child(2){border-left-color:oklch(0.72 0.14 210);}
+    .project-item:nth-child(3){border-left-color:oklch(0.72 0.18 145);}
+    .project-item:nth-child(4){border-left-color:oklch(0.72 0.14 300);}
+    .project-item:nth-child(5){border-left-color:oklch(0.72 0.18 25);}
+    .project-item:nth-child(6){border-left-color:oklch(0.72 0.14 180);}
+    .project-item::before { content:''; position:absolute; inset:0; background:var(--surface); opacity:0; transition:opacity .3s; }
+    .project-item:hover::before { opacity:1; }
+    .project-item::after { content:''; position:absolute; bottom:0; left:0; height:1px; width:0; background:var(--accent); transition:width .4s var(--ease-out); }
+    .project-item:hover::after { width:100%; }
+    .project-num { font-size:.72rem; color:var(--muted); font-weight:700; letter-spacing:.1em; text-align:center; position:relative; z-index:1; }
+    .project-info { position:relative; z-index:1; }
+    .project-title { font-weight:700; font-size:1.25rem; letter-spacing:-.02em; margin-bottom:8px; transition:color .2s; }
+    .project-item:hover .project-title { color:var(--accent); }
+    .project-desc { font-size:.86rem; color:var(--muted); font-weight:300; line-height:1.6; }
+    .project-tags { display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+    .tag { font-size:.64rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); border:1px solid var(--border); padding:3px 9px; transition:border-color .2s,color .2s; }
+    .project-item:hover .tag { border-color:rgba(200,146,42,.3); color:var(--accent); }
+    .project-arrow { width:40px; height:40px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:1rem; transition:border-color .3s,background .3s,color .3s,transform .3s; flex-shrink:0; position:relative; z-index:1; }
+    .project-item:hover .project-arrow { border-color:var(--accent); background:var(--accent); color:#000; transform:rotate(45deg); }
+
+    /* ─── SKILLS ─── */
+    #skills { padding:140px 0; border-top:1px solid var(--border); }
+    .skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:64px; }
+    .skill-category { background:var(--bg); padding:40px 36px; }
+    .skill-cat-title { font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:28px; }
+    .skill-items { display:flex; flex-direction:column; gap:16px; }
+    .skill-row { display:flex; flex-direction:column; gap:6px; }
+    .skill-name { font-size:.88rem; font-weight:400; display:flex; justify-content:space-between; color:var(--text); }
+    .skill-pct { color:var(--muted); font-size:.76rem; }
+    .skill-bar { height:2px; background:var(--border); overflow:hidden; }
+    .skill-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0; transition:width 1.2s var(--ease-out); }
+
+    /* ─── EXPERIENCE ─── */
+    #experience { padding:140px 0; border-top:1px solid var(--border); }
+    .exp-layout { display:grid; grid-template-columns:1fr 2fr; gap:80px; margin-top:64px; }
+    .exp-heading { font-weight:900; font-size:clamp(28px,3vw,44px); line-height:1.1; letter-spacing:-.03em; position:sticky; top:120px; }
+    .exp-heading em { font-style:normal; color:var(--accent); }
+    .timeline { position:relative; }
+    .timeline::before { content:''; position:absolute; left:0; top:0; bottom:0; width:1px; background:linear-gradient(to bottom,var(--accent),transparent); }
+    .timeline-item { padding:0 0 52px 40px; position:relative; }
+    .timeline-item::before { content:''; position:absolute; left:-4px; top:6px; width:9px; height:9px; background:var(--bg); border:2px solid var(--accent); border-radius:50%; transition:background .3s; }
+    .timeline-item:hover::before { background:var(--accent); }
+    .timeline-period { font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; font-weight:500; }
+    .timeline-role { font-weight:700; font-size:1.15rem; letter-spacing:-.01em; margin-bottom:4px; }
+    .timeline-company { font-size:.86rem; color:var(--muted); margin-bottom:14px; }
+    .timeline-desc { font-size:.88rem; color:var(--muted); line-height:1.75; font-weight:300; }
+    .award-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(200,146,42,.1); border:1px solid rgba(200,146,42,.25); padding:6px 14px; margin-bottom:12px; margin-right:8px; font-size:.78rem; color:var(--accent); font-weight:500; }
+
+    /* ─── CONTACT ─── */
+    #contact { padding:140px 0 120px; border-top:1px solid var(--border); }
+    .contact-split { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+    .contact-left .section-label { justify-content:flex-start; }
+    .contact-heading { font-weight:900; font-size:clamp(44px,5.5vw,82px); line-height:.96; letter-spacing:-.04em; margin:24px 0 0; }
+    .contact-heading em { font-style:normal; color:var(--accent); }
+    .contact-right { display:flex; flex-direction:column; gap:32px; }
+    .contact-sub { font-size:1rem; color:var(--muted); font-weight:300; line-height:1.7; }
+    .contact-cta { display:inline-flex; align-items:center; gap:14px; background:var(--accent); color:#000; font-weight:700; font-size:.82rem; letter-spacing:.1em; text-transform:uppercase; padding:18px 36px; border:none; cursor:none; position:relative; overflow:hidden; transition:transform .3s var(--ease-out); align-self:flex-start; }
+    .contact-cta::before { content:''; position:absolute; inset:0; background:#fff; transform:translateX(-101%); transition:transform .4s var(--ease-out); }
+    .contact-cta span { position:relative; z-index:1; }
+    .contact-cta:hover { transform:translateY(-2px); }
+    .contact-cta:hover::before { transform:translateX(0); }
+    .contact-links { display:flex; gap:24px; flex-wrap:wrap; }
+    .contact-link { font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); transition:color .2s; position:relative; padding-bottom:3px; }
+    .contact-link::after { content:''; position:absolute; bottom:0; left:0; width:0; height:1px; background:var(--accent); transition:width .3s var(--ease-out); }
+    .contact-link:hover { color:var(--text); }
+    .contact-link:hover::after { width:100%; }
+    .contact-email-big { font-weight:700; font-size:clamp(18px,2.2vw,32px); letter-spacing:-.02em; color:var(--text); transition:color .3s; word-break:break-all; }
+    .contact-email-big:hover { color:var(--accent); }
+
+    /* ─── FOOTER ─── */
+    footer { padding:28px 48px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .footer-copy { font-size:.72rem; color:var(--muted); }
+    .footer-tag  { font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+
+    /* ─── BACK TO TOP ─── */
+    #back-top { position:fixed; bottom:32px; right:32px; width:44px; height:44px; border:1px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:.9rem; cursor:none; z-index:50; opacity:0; transform:translateY(16px); transition:opacity .3s,transform .3s,border-color .2s,color .2s; }
+    #back-top.visible { opacity:1; transform:translateY(0); }
+    #back-top:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* ─── TWEAKS PANEL ─── */
+    #tweaks-panel { display:none; position:fixed; bottom:24px; left:24px; background:var(--surface); border:1px solid var(--border); padding:24px; width:270px; z-index:1000; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+    #tweaks-panel.open { display:block; }
+    .tweaks-title { font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:20px; font-weight:700; }
+    .tweak-row { margin-bottom:16px; }
+    .tweak-label { font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .tweak-opts { display:flex; gap:6px; flex-wrap:wrap; }
+    .tweak-btn { font-size:.68rem; letter-spacing:.06em; padding:5px 10px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; transition:all .2s; font-family:var(--ff); }
+    .tweak-btn.active,.tweak-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(200,146,42,.08); }
+    .tweak-swatch { width:26px; height:26px; border:2px solid transparent; cursor:pointer; transition:border-color .2s; }
+    .tweak-swatch.active,.tweak-swatch:hover { border-color:var(--text); }
+    .theme-btn { display:flex; align-items:center; gap:10px; text-align:left; width:100%; margin-bottom:6px; }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 900px) {
+      nav { padding:20px 24px; }
+      nav.scrolled { padding:14px 24px; }
+      .nav-links { gap:20px; }
+      .nav-links a { font-size:.7rem; }
+      #hero { padding:0 24px; }
+      .hero-top-bar { left:24px; right:24px; top:76px; flex-direction:column; align-items:flex-start; gap:4px; }
+      .container { padding:0 24px; }
+      .about-grid { grid-template-columns:1fr; gap:40px; }
+      .about-photo-wrap { max-width:280px; }
+      #work { padding:80px 0; }
+      .work-header { flex-direction:column; align-items:flex-start; gap:8px; margin-bottom:40px; }
+      .project-item { grid-template-columns:40px 1fr auto; gap:16px; padding:24px 20px 24px 0; }
+      .skills-layout { gap:28px; }
+      .exp-layout { grid-template-columns:1fr; gap:40px; }
+      .exp-heading { position:static; }
+      .contact-split { grid-template-columns:1fr; gap:48px; }
+      footer { flex-direction:column; gap:8px; text-align:center; padding:24px; }
+      #back-top { bottom:20px; right:20px; }
+      #tweaks-panel { left:16px; bottom:16px; width:calc(100% - 32px); }
+      .ghost-num { display:none; }
+    }
+    @media (max-width:600px) {
+      .hero-name { font-size:clamp(42px,12vw,80px); }
+      .nav-links { gap:14px; }
+      .nav-links a { letter-spacing:.06em; }
+      #about,#work,#skills,#experience,#contact { padding:80px 0; }
+      .project-item { grid-template-columns:32px 1fr; }
+      .project-arrow { display:none; }
+    }
+  </style>
+</head>
+<body class="loading">
+
+<!-- Preloader -->
+<div id="preloader">
+  <div class="pre-header">vikram.sai.simha // boot sequence</div>
+  <div class="pre-terminal" id="pre-terminal"></div>
+  <div class="pre-bigline" id="pre-bigline">Hello, <span>World.</span></div>
+  <div class="pre-progress-wrap" id="pre-progress-wrap">
+    <div class="pre-progress-bar" id="pre-bar"></div>
+  </div>
+  <div class="pre-pct" id="pre-pct">0%</div>
+</div>
+
+<!-- Cursor -->
+<div id="cursor-blend"></div>
+<div id="cursor-dot"></div>
+
+<!-- Scroll progress -->
+<div id="scroll-progress"></div>
+
+<!-- Back to top -->
+<button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- Nav -->
+<nav id="nav">
+  <div class="nav-logo">Vikram<span>.</span></div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-bg-line"></div>
+  <div class="hero-accent-dot" id="hero-dot"></div>
+  <div class="hero-top-bar" id="hero-top-bar">
+    <div class="hero-top-left"><span>VS</span><span style="color:var(--border)">|</span>Hyderabad · Open to Remote</div>
+    <div class="hero-top-right">Full Stack Developer · 2026</div>
+  </div>
+  <div class="hero-name">
+    <span class="line"><span class="word" data-delay="0">Vikram Sai Simha</span></span>
+    <span class="line"><span class="word last" data-delay="160">Vissamsetti</span></span>
+  </div>
+  <div class="hero-role" id="hero-role">
+    <span class="hero-role-tag">Full Stack Dev</span>
+    <span class="hero-role-text">I build things that ship, scale, and stick.</span>
+  </div>
+  <div class="hero-scroll" id="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about" data-section="about">
+  <div class="container">
+    <div class="ghost-num">01</div>
+    <div class="about-grid">
+      <div>
+        <div class="section-label reveal">About</div>
+        <h2 class="about-heading reveal stagger-1">
+          Not just<br/>buzzwords —<br/><em>results.</em>
+        </h2>
+        <div class="about-stats reveal stagger-2">
+          <div class="stat-cell"><div class="stat-num counter" data-target="6">0</div><div class="stat-label">Years of experience</div></div>
+          <div class="stat-cell"><div class="stat-num counter" data-target="6">0</div><div class="stat-label">Real products shipped</div></div>
+          <div class="stat-cell"><div class="stat-num counter" data-target="3">0</div><div class="stat-label">Disciplines mastered</div></div>
+          <div class="stat-cell"><div class="stat-num">∞</div><div class="stat-label">Coffee consumed</div></div>
         </div>
-      </nav>
-    </header>
+      </div>
+      <div class="about-body reveal-left stagger-2">
+        <p>I build things that ship, scale, and stick — full stack with a real AI-product layer. Grounded in product reality, I think about delivery, not just implementation.</p>
+        <p>A progression from network QA at TCS to product-facing full stack at Enablix: RAG chatbot, LLM pipeline, mobile app, document tooling, audit systems, and a live WordPress tourism site — six different problems, six shipped solutions.</p>
+        <p>Based in Hyderabad · Open to remote.</p>
+      </div>
+      <div class="about-photo-wrap reveal-scale stagger-3">
+        <img src="uploads/Gemini_Generated_Image_abc62pabc62pabc6.jpeg" alt="Vikram Sai Simha Vissamsetti" />
+        <div class="about-photo-corner"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <main id="home">
-      <section class="hero container section">
-        <div class="avatar reveal">
-          <!-- To use your photo, replace the span below with: -->
-          <!-- <img src="your-photo.jpg" alt="Vikram Sai Simha Vissamsetti" /> -->
-          <span>VS</span>
+<!-- Work -->
+<section id="work" data-section="work">
+  <div class="container">
+    <div class="ghost-num">02</div>
+    <div class="work-header">
+      <div>
+        <div class="section-label reveal">Selected Work</div>
+        <h2 class="work-heading reveal stagger-1">Six real products.<br/>Six different problems.</h2>
+      </div>
+      <div class="work-count reveal stagger-2">06 Projects</div>
+    </div>
+    <div class="projects-list">
+
+      <div class="project-item reveal stagger-1">
+        <div class="project-num">01</div>
+        <div class="project-info">
+          <div class="project-title">AI-first companion for sales assets</div>
+          <div class="project-desc">Built a RAG chatbot for effective sales asset information retrieval — OpenAI GPT for quality responses, OpenSearch as a vector database, LlamaIndex orchestrating the structure for seamless integration.</div>
+          <div class="project-tags"><span class="tag">OpenAI GPT</span><span class="tag">OpenSearch</span><span class="tag">LlamaIndex</span><span class="tag">Java</span></div>
         </div>
+        <div class="project-arrow">↗</div>
+      </div>
 
-        <p class="eyebrow reveal">Full Stack Developer @ Enablix</p>
-        <h1 class="headline reveal">
-          Vikram Sai Simha
-          <span>Vissamsetti</span>
-        </h1>
-
-        <div class="typing-wrapper reveal" aria-live="polite">
-          <span class="typing-prefix">I build </span><span class="typing-text" id="typingText"></span><span class="typing-cursor" aria-hidden="true">|</span>
+      <div class="project-item reveal stagger-2">
+        <div class="project-num">02</div>
+        <div class="project-info">
+          <div class="project-title">Automated excerpt and tag generator</div>
+          <div class="project-desc">LLM-powered system generating succinct excerpts for sales assets, analysing content, and creating relevant tags — boosting asset discoverability and minimising manual effort at scale.</div>
+          <div class="project-tags"><span class="tag">LLM</span><span class="tag">Angular</span><span class="tag">Spring Boot</span><span class="tag">MongoDB</span></div>
         </div>
+        <div class="project-arrow">↗</div>
+      </div>
 
-        <p class="subhead reveal">
-          I build and optimize software products using Java, Angular, Spring Boot, MongoDB, and Ionic. I also develop LLM-powered workflows with OpenSearch and LlamaIndex to improve discoverability and information retrieval.
-        </p>
-
-        <div class="hero-meta reveal">
-          <span>Hyderabad, Telangana, India</span>
-          <span>Enablix (March 2021 - Present)</span>
-          <span>Ex-TCS (British Telecommunications)</span>
+      <div class="project-item reveal stagger-3">
+        <div class="project-num">03</div>
+        <div class="project-info">
+          <div class="project-title">Cross-platform Ionic application</div>
+          <div class="project-desc">Built the Enablix Android and iOS app using Ionic, expanding product reach to mobile. Full integration with existing REST APIs delivering a seamless experience across platforms.</div>
+          <div class="project-tags"><span class="tag">Ionic</span><span class="tag">Angular</span><span class="tag">REST API</span><span class="tag">Android / iOS</span></div>
         </div>
+        <div class="project-arrow">↗</div>
+      </div>
 
-        <div class="hero-actions reveal">
-          <a class="btn btn-primary" href="#experience">View Experience</a>
-          <a class="btn btn-ghost" href="https://www.linkedin.com/in/vikramvissamsetti/" target="_blank" rel="noreferrer">LinkedIn</a>
-          <a class="btn btn-ghost" href="https://github.com/paramzvik" target="_blank" rel="noreferrer">GitHub</a>
-          <a class="btn btn-ghost" href="https://x.com/iparamzvik" target="_blank" rel="noreferrer">Twitter / X</a>
+      <div class="project-item reveal stagger-4">
+        <div class="project-num">04</div>
+        <div class="project-info">
+          <div class="project-title">Export and document workflow</div>
+          <div class="project-desc">A Learning Module for in-product training resources plus a full document export suite — Apache POI for multi-format data exports and Aspose API integration for efficient PPT slide merging.</div>
+          <div class="project-tags"><span class="tag">Apache POI</span><span class="tag">Aspose API</span><span class="tag">Angular</span><span class="tag">Java</span></div>
         </div>
+        <div class="project-arrow">↗</div>
+      </div>
 
-        <div class="hero-grid reveal" aria-label="Focus areas">
-          <article>
-            <h3>LLM Product Features</h3>
-            <p>Developed LLM-powered excerpt generation and tagging workflows to improve sales asset discoverability.</p>
-          </article>
-          <article>
-            <h3>RAG and Search</h3>
-            <p>Built RAG-based chatbot flows using OpenAI GPT, OpenSearch vector storage, and LlamaIndex orchestration.</p>
-          </article>
-          <article>
-            <h3>Web + Mobile Delivery</h3>
-            <p>Delivered REST APIs, modern UI improvements, and Ionic apps for Android and iOS with production quality checks.</p>
-          </article>
+      <div class="project-item reveal stagger-5">
+        <div class="project-num">05</div>
+        <div class="project-info">
+          <div class="project-title">Activity Audits & Reporting</div>
+          <div class="project-desc">Comprehensive activity audit system tracking user actions across the platform, with configurable report generation — enabling teams to visualise usage patterns, monitor asset engagement, and export insights in multiple formats.</div>
+          <div class="project-tags"><span class="tag">Angular</span><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">MongoDB</span></div>
         </div>
-      </section>
+        <div class="project-arrow">↗</div>
+      </div>
 
-      <section class="about section container" id="about">
-        <div class="section-heading reveal">
-          <p class="eyebrow">About</p>
-          <h2>Building intelligent, user-focused products across web, mobile, and AI-assisted workflows.</h2>
+      <div class="project-item reveal stagger-6">
+        <div class="project-num">06</div>
+        <div class="project-info">
+          <div class="project-title">Timeh Tours Ghana — Full Website</div>
+          <div class="project-desc">Designed and built a complete eco-tourism website for Timeh Tours covering Ghana, Togo & Benin. Built on WordPress using WP Travel Engine for tour listings and bookings — customised the theme extensively with custom CSS, configured plugins for vehicle rentals, travel insurance, visa-on-arrival, and a give-back project page.</div>
+          <div class="project-tags"><span class="tag">WordPress</span><span class="tag">WP Travel Engine</span><span class="tag">PHP</span><span class="tag">Custom CSS</span></div>
         </div>
-        <div class="about-content reveal">
-          <p>
-            As a Full Stack Developer at Enablix, I work on UI redesign, REST API implementation, learning modules, analytics-based optimization, and cross-platform mobile delivery. My focus is improving usability, accessibility, and product efficiency.
-          </p>
-          <p>
-            I have also built RAG chatbot capabilities and LLM-powered content workflows, and previously contributed at TCS to British Telecommunications through test automation, networking device testing, and structured quality plans.
-          </p>
+        <a href="https://timehtoursghana.com/" target="_blank" class="project-arrow">↗</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills" data-section="skills">
+  <div class="container">
+    <div class="ghost-num">03</div>
+    <div class="section-label reveal">Technical Skills</div>
+    <h2 class="work-heading reveal stagger-1" style="font-size:clamp(34px,3.8vw,54px);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin-bottom:0">The Stack</h2>
+    <div class="skills-grid">
+      <div class="skill-category reveal stagger-1">
+        <div class="skill-cat-title">Frontend</div>
+        <div class="skill-items">
+          <div class="skill-row"><div class="skill-name">Angular <span class="skill-pct">95%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="95"></div></div></div>
+          <div class="skill-row"><div class="skill-name">Ionic Framework <span class="skill-pct">90%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="90"></div></div></div>
+          <div class="skill-row"><div class="skill-name">HTML / CSS / JS <span class="skill-pct">88%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="88"></div></div></div>
+          <div class="skill-row"><div class="skill-name">TypeScript <span class="skill-pct">82%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="82"></div></div></div>
         </div>
-      </section>
-
-      <section class="skills section container" id="skills">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Skills</p>
-          <h2>Technical stack and delivery strengths.</h2>
+      </div>
+      <div class="skill-category reveal stagger-2">
+        <div class="skill-cat-title">Backend</div>
+        <div class="skill-items">
+          <div class="skill-row"><div class="skill-name">Java / Spring Boot <span class="skill-pct">93%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="93"></div></div></div>
+          <div class="skill-row"><div class="skill-name">REST APIs <span class="skill-pct">92%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="92"></div></div></div>
+          <div class="skill-row"><div class="skill-name">MongoDB <span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="85"></div></div></div>
+          <div class="skill-row"><div class="skill-name">Apache POI / Aspose <span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="80"></div></div></div>
         </div>
-
-        <div class="skills-grid">
-          <article class="card reveal">
-            <h3>Frontend</h3>
-            <ul>
-              <li>Angular</li>
-              <li>HTML & CSS</li>
-              <li>JavaScript / TypeScript</li>
-              <li>Ionic</li>
-            </ul>
-          </article>
-          <article class="card reveal">
-            <h3>Backend</h3>
-            <ul>
-              <li>Java</li>
-              <li>Spring Boot</li>
-              <li>REST API Development</li>
-              <li>MongoDB</li>
-            </ul>
-          </article>
-          <article class="card reveal">
-            <h3>AI & Search</h3>
-            <ul>
-              <li>Large Language Models (LLM)</li>
-              <li>OpenSearch</li>
-              <li>LlamaIndex</li>
-              <li>RAG Pipelines</li>
-            </ul>
-          </article>
-          <article class="card reveal">
-            <h3>Quality & Process</h3>
-            <ul>
-              <li>Manual Testing</li>
-              <li>Selenium</li>
-              <li>Agile</li>
-              <li>Jira / AWS / Docker</li>
-            </ul>
-          </article>
+      </div>
+      <div class="skill-category reveal stagger-3">
+        <div class="skill-cat-title">AI / Data</div>
+        <div class="skill-items">
+          <div class="skill-row"><div class="skill-name">LLM / OpenAI GPT <span class="skill-pct">88%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="88"></div></div></div>
+          <div class="skill-row"><div class="skill-name">LlamaIndex / RAG <span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="85"></div></div></div>
+          <div class="skill-row"><div class="skill-name">OpenSearch <span class="skill-pct">82%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="82"></div></div></div>
+          <div class="skill-row"><div class="skill-name">Python / Pandas <span class="skill-pct">75%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="75"></div></div></div>
         </div>
-      </section>
-
-      <section class="projects section container" id="projects">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Projects</p>
-          <h2>Work highlights from recent roles.</h2>
+      </div>
+    </div>
+    <div class="skills-grid" style="margin-top:1px">
+      <div class="skill-category reveal stagger-1" style="grid-column:1/-1">
+        <div class="skill-cat-title">Tools & Workflow</div>
+        <div class="skill-items" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+          <div class="skill-row"><div class="skill-name">Git <span class="skill-pct">92%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="92"></div></div></div>
+          <div class="skill-row"><div class="skill-name">Jira <span class="skill-pct">88%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="88"></div></div></div>
+          <div class="skill-row"><div class="skill-name">Agile / Scrum <span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="85"></div></div></div>
+          <div class="skill-row"><div class="skill-name">Asana <span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-pct="80"></div></div></div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="projects-grid">
-          <article class="project-card reveal">
-            <p class="tag">LLM Workflow</p>
-            <h3>Automated Excerpt and Tag Generation</h3>
-            <p>
-              Developed an LLM-powered system that generates concise excerpts and relevant tags for sales assets, reducing manual effort.
-            </p>
-          </article>
+<!-- Experience -->
+<section id="experience" data-section="experience">
+  <div class="container">
+    <div class="ghost-num">04</div>
+    <div class="section-label reveal">Experience</div>
+    <div class="exp-layout">
+      <div>
+        <h2 class="exp-heading reveal">Where<br/>I've<br/><em>worked.</em></h2>
+      </div>
+      <div class="timeline">
 
-          <article class="project-card reveal">
-            <p class="tag">RAG Chatbot</p>
-            <h3>AI Information Retrieval Assistant</h3>
-            <p>
-              Built a RAG chatbot using OpenAI GPT, OpenSearch as vector storage, and LlamaIndex to enable fast, high-quality responses on sales assets.
-            </p>
-          </article>
-
-          <article class="project-card reveal">
-            <p class="tag">Platform Engineering</p>
-            <h3>Aspose + Apache POI Integrations</h3>
-            <p>
-              Integrated Aspose for PPT slide merging and Apache POI for export/report features, improving document workflows and user productivity.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section class="experience section container" id="experience">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Experience</p>
-          <h2>Professional journey and education.</h2>
-        </div>
-
-        <div class="timeline">
-          <article class="timeline-item reveal">
-            <p class="timeline-meta">March 2021 - Present</p>
-            <h3>Full Stack Developer, Enablix</h3>
-            <p>Led UI improvements, built REST APIs, created a learning module, delivered Ionic mobile apps, and implemented LLM/RAG capabilities using OpenSearch and LlamaIndex.</p>
-          </article>
-          <article class="timeline-item reveal">
-            <p class="timeline-meta">July 2019 - March 2021</p>
-            <h3>System Engineer, Tata Consultancy Services (Bangalore)</h3>
-            <p>Worked under British Telecommunications to automate testing, validate networking devices, maintain testing plans, and improve quality through detailed bug reporting.</p>
-          </article>
-          <article class="timeline-item reveal">
-            <p class="timeline-meta">July 2015 - May 2019</p>
-            <h3>BE, Electronics & Communication, Arunai Engineering College</h3>
-            <p>Graduated with CGPA 8.65. Earlier academics include 97.2% in Intermediate and 9.7 CGPA in SSC.</p>
-          </article>
-          <article class="timeline-item reveal">
-            <p class="timeline-meta">Awards</p>
-            <h3>Recognition</h3>
-            <p>Recognized with Star of the Quarter and On the Spot Award for consistent delivery and product contribution.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="skills section container" id="credentials">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Credentials</p>
-          <h2>Certifications and languages.</h2>
-        </div>
-        <div class="skills-grid">
-          <article class="card reveal">
-            <h3>Certifications</h3>
-            <ul>
-              <li>Pandas Micro-Course</li>
-              <li>Python: Data Analysis</li>
-              <li>Programming Foundations: Algorithms</li>
-              <li>Hadoop Foundations - Level 1</li>
-            </ul>
-          </article>
-          <article class="card reveal">
-            <h3>Languages</h3>
-            <ul>
-              <li>Telugu (Native/Bilingual)</li>
-              <li>English (Limited Working)</li>
-              <li>Tamil (Limited Working)</li>
-              <li>Hindi (Elementary)</li>
-            </ul>
-          </article>
-          <article class="card reveal">
-            <h3>Core Domains</h3>
-            <ul>
-              <li>Enterprise Sales Enablement</li>
-              <li>Information Retrieval</li>
-              <li>Testing & Quality Engineering</li>
-              <li>Document Workflow Automation</li>
-            </ul>
-          </article>
-          <article class="card reveal">
-            <h3>Focus</h3>
-            <ul>
-              <li>Product Usability</li>
-              <li>Performance Optimization</li>
-              <li>Automation-first Delivery</li>
-              <li>Collaborative Engineering</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="contact section container" id="contact">
-        <div class="contact-panel reveal">
-          <p class="eyebrow">Contact</p>
-          <h2>Let's build something meaningful.</h2>
-          <p>
-            Open to Full Stack Developer opportunities and product engineering collaborations.
-          </p>
-          <p class="contact-meta">Email: vikramvissamsetti@gmail.com</p>
-          <p class="contact-meta">Phone: +91 9676 514 048</p>
-          <div class="contact-actions">
-            <a class="btn btn-primary" href="https://www.linkedin.com/in/vikramvissamsetti/" target="_blank" rel="noreferrer">
-              Connect on LinkedIn
-            </a>
-            <a class="btn btn-ghost" href="tel:+919676514048">Call</a>
-            <a class="btn btn-ghost" href="mailto:vikramvissamsetti@gmail.com">Email Me</a>
+        <div class="timeline-item reveal stagger-1">
+          <div class="timeline-period">March 2021 — Present · 5 yrs</div>
+          <div class="timeline-role">Full Stack Developer</div>
+          <div class="timeline-company">Enablix · Ashburn, VA</div>
+          <div class="timeline-desc">Built a RAG-powered chatbot using OpenAI GPT, OpenSearch, and LlamaIndex. Developed an LLM system for automated content tagging, revamped the product UI, created a cross-platform mobile app with Ionic, and built REST APIs connecting frontend to backend systems.</div>
+          <div style="margin-top:16px">
+            <span class="award-badge">⭐ Star of the Quarter</span>
+            <span class="award-badge">⚡ On the Spot Award</span>
           </div>
         </div>
-      </section>
-    </main>
 
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="18 15 12 9 6 15"/>
-      </svg>
-    </button>
+        <div class="timeline-item reveal stagger-2">
+          <div class="timeline-period">July 2019 — March 2021 · 1 yr 9 mos</div>
+          <div class="timeline-role">System Engineer</div>
+          <div class="timeline-company">Tata Consultancy Services · Bengaluru, India</div>
+          <div class="timeline-desc">Tested physical networking devices for British Telecommunications — responsible for quality and performance of new BT network hardware. Implemented automation scripts, developed detailed test plans, and contributed to system quality through thorough bug reporting.</div>
+        </div>
 
-    <footer class="site-footer">
-      <p>&copy; <span id="year"></span> Vikram Sai Simha Vissamsetti. Built with intent.</p>
-    </footer>
+        <div class="timeline-item reveal stagger-3">
+          <div class="timeline-period">2015 — 2019</div>
+          <div class="timeline-role">Bachelor of Engineering</div>
+          <div class="timeline-company">Arunai Engineering College · Electrical, Electronic & Communications Engineering</div>
+          <div class="timeline-desc">Foundational studies in electronics and communications engineering, laying the groundwork for a career in software development.</div>
+        </div>
 
-    <script src="script.js"></script>
-  </body>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" data-section="contact">
+  <div class="container">
+    <div class="ghost-num">05</div>
+    <div class="contact-split">
+      <div class="contact-left reveal">
+        <div class="section-label">Contact</div>
+        <h2 class="contact-heading">Let's<br/><em>connect.</em></h2>
+      </div>
+      <div class="contact-right">
+        <p class="contact-sub reveal stagger-1">Have a project, a question, or just want to say hello? My inbox is always open.</p>
+        <a href="mailto:vikramvissamsetti@gmail.com" class="contact-email-big reveal stagger-2">vikramvissamsetti@gmail.com</a>
+        <a href="mailto:vikramvissamsetti@gmail.com" class="contact-cta reveal stagger-3"><span>Get in touch →</span></a>
+        <div class="contact-links reveal stagger-4">
+          <a href="https://www.linkedin.com/in/vikramvissamsetti/" target="_blank" class="contact-link">LinkedIn</a>
+          <a href="https://github.com/paramzvik" target="_blank" class="contact-link">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-copy">© 2026 Vikram Sai Simha Vissamsetti</div>
+  <div class="footer-tag">Built with precision.</div>
+</footer>
+
+<!-- Tweaks Panel -->
+<div id="tweaks-panel">
+  <div class="tweaks-title">Tweaks</div>
+  <div class="tweak-row">
+    <div class="tweak-label">Theme</div>
+    <div class="tweak-opts" style="flex-direction:column">
+      <button class="tweak-btn theme-btn active" data-theme="obsidian" data-bg="#080808" data-bg2="#0f0f0f" data-surface="#141414" data-text="#f0ede8" data-muted="rgba(240,237,232,0.45)" data-border="rgba(255,255,255,0.07)"><span style="width:12px;height:12px;background:#080808;border:1px solid #333;flex-shrink:0;display:inline-block"></span> Obsidian</button>
+      <button class="tweak-btn theme-btn" data-theme="midnight" data-bg="#0d0c1a" data-bg2="#121128" data-surface="#18163a" data-text="#e8e6f5" data-muted="rgba(232,230,245,0.45)" data-border="rgba(255,255,255,0.08)"><span style="width:12px;height:12px;background:#0d0c1a;border:1px solid #2a2850;flex-shrink:0;display:inline-block"></span> Midnight Blue</button>
+      <button class="tweak-btn theme-btn" data-theme="forest" data-bg="#0a0f0c" data-bg2="#0f1410" data-surface="#141a15" data-text="#e8f0ea" data-muted="rgba(232,240,234,0.45)" data-border="rgba(255,255,255,0.07)"><span style="width:12px;height:12px;background:#0a0f0c;border:1px solid #1e3322;flex-shrink:0;display:inline-block"></span> Forest Night</button>
+      <button class="tweak-btn theme-btn" data-theme="cream" data-bg="#f5f2ed" data-bg2="#ede9e3" data-surface="#e8e4de" data-text="#1a1815" data-muted="rgba(26,24,21,0.5)" data-border="rgba(0,0,0,0.08)" data-light="1"><span style="width:12px;height:12px;background:#f5f2ed;border:1px solid #ccc;flex-shrink:0;display:inline-block"></span> Cream Light</button>
+      <button class="tweak-btn theme-btn" data-theme="slate" data-bg="#1a1f2e" data-bg2="#1f2438" data-surface="#252a40" data-text="#e4e8f5" data-muted="rgba(228,232,245,0.45)" data-border="rgba(255,255,255,0.08)"><span style="width:12px;height:12px;background:#1a1f2e;border:1px solid #2e3550;flex-shrink:0;display:inline-block"></span> Slate</button>
+    </div>
+  </div>
+  <div class="tweak-row" style="margin-top:16px">
+    <div class="tweak-label">Accent</div>
+    <div class="tweak-opts">
+      <div class="tweak-swatch active" style="background:#c8922a" data-accent="oklch(0.72 0.14 65)" data-accent2="oklch(0.72 0.14 210)"></div>
+      <div class="tweak-swatch" style="background:#3b82f6" data-accent="oklch(0.60 0.18 240)" data-accent2="oklch(0.60 0.18 160)"></div>
+      <div class="tweak-swatch" style="background:#22c55e" data-accent="oklch(0.72 0.18 145)" data-accent2="oklch(0.72 0.18 210)"></div>
+      <div class="tweak-swatch" style="background:#e879f9" data-accent="oklch(0.72 0.20 310)" data-accent2="oklch(0.72 0.20 240)"></div>
+      <div class="tweak-swatch" style="background:#f43f5e" data-accent="oklch(0.62 0.22 15)" data-accent2="oklch(0.62 0.22 280)"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CURSOR (mix-blend-mode: difference) ──
+const blend = document.getElementById('cursor-blend');
+const cdot  = document.getElementById('cursor-dot');
+let mx=0,my=0,bx=0,by=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function animC(){
+  cdot.style.left=mx+'px'; cdot.style.top=my+'px';
+  bx+=(mx-bx)*.13; by+=(my-by)*.13;
+  blend.style.left=bx+'px'; blend.style.top=by+'px';
+  requestAnimationFrame(animC);
+})();
+document.querySelectorAll('.project-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{document.body.classList.add('cursor-project');document.body.classList.remove('cursor-hover');});
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-project'));
+});
+document.querySelectorAll('a,button,.tweak-swatch,.tweak-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{if(!document.body.classList.contains('cursor-project'))document.body.classList.add('cursor-hover');});
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+});
+
+// ── SCROLL PROGRESS ──
+const prog = document.getElementById('scroll-progress');
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  prog.style.width=pct+'%';
+});
+
+// ── NAV ──
+const nav = document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',window.scrollY>60);
+  document.getElementById('back-top').classList.toggle('visible',window.scrollY>400);
+});
+
+// ── ACTIVE NAV ──
+const sections = document.querySelectorAll('[data-section]');
+const navLinks  = document.querySelectorAll('.nav-links a');
+const navObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const link=document.querySelector(`.nav-links a[href="#${e.target.dataset.section}"]`);
+      if(link)link.classList.add('active');
+    }
+  });
+},{threshold:0.3});
+sections.forEach(s=>navObs.observe(s));
+
+// ── PRELOADER ──
+(function(){
+  const terminal=document.getElementById('pre-terminal');
+  const bigline=document.getElementById('pre-bigline');
+  const barWrap=document.getElementById('pre-progress-wrap');
+  const bar=document.getElementById('pre-bar');
+  const pct=document.getElementById('pre-pct');
+  const preloader=document.getElementById('preloader');
+  const lines=[
+    {html:'<span class="pre-prompt">▶ </span><span class="pre-comment">// initializing developer environment...</span>',delay:0},
+    {html:'<span class="pre-prompt">▶ </span><span class="pre-keyword">const</span> <span class="pre-hi">developer</span> = {',delay:320},
+    {html:'&nbsp;&nbsp;name: <span class="pre-string">"Vikram Sai Simha Vissamsetti"</span>,',delay:560},
+    {html:'&nbsp;&nbsp;stack: <span class="pre-string">"Angular · Java · Spring Boot · LLM"</span>,',delay:760},
+    {html:'&nbsp;&nbsp;location: <span class="pre-string">"Hyderabad → Remote"</span>,',delay:960},
+    {html:'&nbsp;&nbsp;status: <span class="pre-string">"shipping"</span>',delay:1120},
+    {html:'};',delay:1280},
+    {html:'',delay:1380},
+    {html:'<span class="pre-prompt">▶ </span><span class="pre-fn">developer</span>.<span class="pre-fn">init</span>();',delay:1480},
+    {html:'<span class="pre-prompt">▶ </span><span class="pre-comment">// loading portfolio...</span>',delay:1780},
+  ];
+  const cursor=document.createElement('span');
+  cursor.className='pre-cursor';
+  lines.forEach(({html,delay})=>{
+    setTimeout(()=>{
+      const el=document.createElement('span');
+      el.className='pre-line'; el.innerHTML=html;
+      terminal.appendChild(el); terminal.appendChild(cursor);
+    },delay);
+  });
+  setTimeout(()=>{
+    bigline.style.cssText='opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .6s cubic-bezier(0.16,1,0.3,1)';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{bigline.style.opacity='1';bigline.style.transform='translateY(0)';}));
+  },2000);
+  setTimeout(()=>{
+    barWrap.style.cssText='opacity:1;transition:opacity .4s ease';
+    pct.style.cssText='opacity:1;transition:opacity .4s ease';
+    let p=0;
+    const iv=setInterval(()=>{
+      p+=Math.random()*16+5;
+      if(p>=100){p=100;clearInterval(iv);}
+      bar.style.width=p+'%';
+      pct.textContent=Math.floor(p)+'%';
+    },70);
+  },2100);
+  setTimeout(()=>{
+    preloader.classList.add('exit');
+    document.body.classList.remove('loading');
+    setTimeout(()=>preloader.style.display='none',700);
+  },3300);
+})();
+
+// ── HERO ANIMATION ──
+window.addEventListener('load',()=>{
+  const hd=3400;
+  setTimeout(()=>{
+    const tb=document.getElementById('hero-top-bar');
+    tb.style.transition='opacity .8s ease,transform .8s cubic-bezier(0.16,1,0.3,1)';
+    tb.style.opacity='1'; tb.style.transform='translateY(0)';
+  },hd+200);
+  document.querySelectorAll('.hero-name .word').forEach(w=>{
+    const delay=parseInt(w.dataset.delay)||0;
+    setTimeout(()=>{
+      w.style.transition=`transform 1s cubic-bezier(0.16,1,0.3,1),opacity .8s ease`;
+      w.style.transform='translateY(0)'; w.style.opacity='1';
+    },hd+400+delay);
+  });
+  setTimeout(()=>{
+    const r=document.getElementById('hero-role');
+    r.style.transition='opacity .8s ease,transform .8s cubic-bezier(0.16,1,0.3,1)';
+    r.style.opacity='1'; r.style.transform='translateY(0)';
+  },hd+900);
+  setTimeout(()=>{
+    const s=document.getElementById('hero-scroll');
+    s.style.transition='opacity 1s ease'; s.style.opacity='1';
+    const d=document.getElementById('hero-dot');
+    d.style.transition='opacity .8s ease'; d.style.opacity='1';
+  },hd+1200);
+});
+
+// ── PARALLAX ──
+window.addEventListener('scroll',()=>{
+  const sy=window.scrollY;
+  const hn=document.querySelector('.hero-name');
+  const hr=document.getElementById('hero-role');
+  if(hn)hn.style.transform=`translateY(${sy*.22}px)`;
+  if(hr)hr.style.transform=`translateY(${sy*.13}px)`;
+});
+
+// ── SCROLL REVEALS ──
+const revealObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:.1,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el=>revealObs.observe(el));
+
+// ── STAT COUNTERS ──
+const counterObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const target=parseInt(e.target.dataset.target);
+      let current=0;
+      const step=target/40;
+      const suffix=e.target.dataset.suffix||'+';
+      const iv=setInterval(()=>{
+        current=Math.min(current+step,target);
+        e.target.textContent=Math.floor(current)+(current>=target?suffix:'');
+        if(current>=target)clearInterval(iv);
+      },35);
+      counterObs.unobserve(e.target);
+    }
+  });
+},{threshold:.5});
+document.querySelectorAll('.counter').forEach(el=>counterObs.observe(el));
+
+// ── TWEAKS ──
+window.addEventListener('message',e=>{
+  if(e.data?.type==='__activate_edit_mode')  document.getElementById('tweaks-panel').classList.add('open');
+  if(e.data?.type==='__deactivate_edit_mode')document.getElementById('tweaks-panel').classList.remove('open');
+});
+window.parent.postMessage({type:'__edit_mode_available'},'*');
+const root=document.documentElement;
+document.querySelectorAll('.theme-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    root.style.setProperty('--bg',btn.dataset.bg);
+    root.style.setProperty('--bg2',btn.dataset.bg2);
+    root.style.setProperty('--surface',btn.dataset.surface);
+    root.style.setProperty('--text',btn.dataset.text);
+    root.style.setProperty('--muted',btn.dataset.muted);
+    root.style.setProperty('--border',btn.dataset.border);
+  });
+});
+document.querySelectorAll('.tweak-swatch').forEach(sw=>{
+  sw.addEventListener('click',()=>{
+    document.querySelectorAll('.tweak-swatch').forEach(s=>s.classList.remove('active'));
+    sw.classList.add('active');
+    root.style.setProperty('--accent',sw.dataset.accent);
+    root.style.setProperty('--accent2',sw.dataset.accent2);
+  });
+});
+</script>
+</body>
 </html>
